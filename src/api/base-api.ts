@@ -22,8 +22,8 @@ export class BaseApi {
      * This function builds the request configuration that should be used by axios.
      * @param requestMethod - The request method that will be used.
      * @param endpoint - The endpoint to which the request should be sent.
-     * @param parameters - Parameters/Payload to be used for the request. 
-     * @returns An object of type {@link ConfigurationParameters}
+     * @param parameters - Configuration Parameters/Payload to be used for the request. Defaults to an empty object.
+     * @returns An object of type {@link AxiosRequestConfig}
      */
     public buildRequestConfiguration(requestMethod: Method, endpoint: string, parameters: ConfigurationParameters = {}): AxiosRequestConfig {
         const urlSlug: string = parameters.id ? `${endpoint}/${parameters.id}` : `${endpoint}`;
