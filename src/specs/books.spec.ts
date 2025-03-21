@@ -2,7 +2,6 @@ import { AxiosResponse, HttpStatusCode } from 'axios';
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
 import { BaseApi } from '../api/base-api';
-import { Book } from '../api/models/data-response-model';
 import { Endpoint, Method } from '../constants/api-const';
 import { BooksRepository } from '../repository/books-repository';
 
@@ -138,7 +137,7 @@ describe(`Endpoint /${endpoint}`, () => {
 
     const postBooksTest = [
         { titleSlug: '', expectedCode: HttpStatusCode.Ok, payload: repository.generateBookPayload() },
-        { titleSlug: 'with duplicated Id and Title', expectedCode: HttpStatusCode.BadRequest, payload: existingBook },
+        { titleSlug: 'with duplicated Id', expectedCode: HttpStatusCode.BadRequest, payload: repository.generateBookPayload( { id: existingBook.id }) },
         { titleSlug: 'with undefined payload', expectedCode: HttpStatusCode.UnsupportedMediaType }
     ];
     postBooksTest.forEach((test) => {
@@ -155,8 +154,8 @@ describe(`Endpoint /${endpoint}`, () => {
             });
     
             if(test.expectedCode === HttpStatusCode.Ok) {
-                it(`has response data with id`, () => {
-                    expect(response.data.id).to.exist;
+                it(`has response data with valid id`, () => {
+                    expect(response.data.id).to.be.above(0);
                 });
         
                 it('has response data containing the payload', () => {
@@ -164,7 +163,7 @@ describe(`Endpoint /${endpoint}`, () => {
                 });
         
                 it('has updated the repository', async () => {
-                    const configuration = api.buildRequestConfiguration(Method.GET, endpoint, { id: (response.data as Book).id });
+                    const configuration = api.buildRequestConfiguration(Method.GET, endpoint, { id: response.data.id });
                     response = await api.sendRequest(configuration);
                     expect(response.status).to.equal(HttpStatusCode.Ok);
                     expect(response.data).to.contain(test.payload);
