@@ -19,7 +19,7 @@ export class BaseApi {
     }
 
     /**
-     * This method builds the request configuration that should be used by axios.
+     * This function builds the request configuration that should be used by axios.
      * @param requestMethod - The request method that will be used.
      * @param endpoint - The endpoint to which the request should be sent.
      * @param parameters - Parameters/Payload to be used for the request. 
@@ -35,7 +35,7 @@ export class BaseApi {
     }
 
     /**
-     * This method is responsible for executing a request based on the provided configuration.
+     * This function is responsible for executing a request based on the provided configuration.
      * @param configuration - The request configuration needed from axios.
      * @returns The result from the request as an {@link AxiosResponse}.
      */
