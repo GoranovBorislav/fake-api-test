@@ -1,0 +1,32 @@
+{
+  "name": "fake-api-test-task-mocha",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "npx mocha --require ts-node/register src/**/*.spec.ts",
+    "parallel-test": "npx mocha --require ts-node/register --parallel src/**/*.spec.ts"
+  },
+  "description": "API Tests with TS, Mocha, Chai and Allure",
+  "devDependencies": {
+    "@faker-js/faker": "^9.6.0",
+    "@types/chai": "^5.2.0",
+    "@types/mocha": "^10.0.10",
+    "allure-mocha": "^3.2.0",
+    "axios": "^1.8.2",
+    "chai": "^5.2.0",
+    "mocha": "^11.1.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2"
+  },
+  "mocha": {
+    "diff": true,
+    "package": "./package.json",
+    "slow": "75",
+    "timeout": "2000",
+    "ui": "bdd",
+    "reporter": "allure-mocha",
+    "reporterOptions": [
+      "resultsDir=allure-results",
+      "extraReporters=spec"
+    ]
+  }
+}
