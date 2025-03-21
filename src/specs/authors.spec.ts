@@ -100,6 +100,7 @@ describe(`Endpoint /${endpoint}`, () => {
     
     const putAuthorsTests = [
         { titleSlug: '', parameter: 14, expectedCode: HttpStatusCode.Ok, payload: repository.generateAuthorPayload() },
+        { titleSlug: 'with provided request body Id', parameter: 19, expectedCode: HttpStatusCode.Ok, payload: repository.generateAuthorPayload( { id: 19 }) },
         { titleSlug: '', parameter: -33, expectedCode: HttpStatusCode.NotFound, payload: repository.generateAuthorPayload() },
         { titleSlug: 'with undefined payload', parameter: 5, expectedCode: HttpStatusCode.UnsupportedMediaType }
     ];
