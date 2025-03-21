@@ -1,11 +1,11 @@
 import * as allure from 'allure-js-commons';
-import axios, { AxiosError, AxiosResponse, Method } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse, Method, RawAxiosRequestHeaders } from 'axios';
 import { JsonFileReader } from '../utils/json-file-reader';
 
-interface RequestConfiguration {
-    url: string;
-    method: Method;
-    data: any;
+interface ConfigurationParameters {
+    id?: number | string;
+    headers?: RawAxiosRequestHeaders;
+    payload?: any;
 }
 
 export class BaseApi {
@@ -23,14 +23,15 @@ export class BaseApi {
      * @param requestMethod - The request method that will be used.
      * @param endpoint - The endpoint to which the request should be sent.
      * @param parameters - Parameters/Payload to be used for the request. 
-     * @returns An object of type {@link RequestConfiguration}
+     * @returns An object of type {@link ConfigurationParameters}
      */
-    public buildRequestConfiguration(requestMethod: Method, endpoint: string, parameters: { id?: number | string , payload?: any } = {}): RequestConfiguration {
+    public buildRequestConfiguration(requestMethod: Method, endpoint: string, parameters: ConfigurationParameters = {}): AxiosRequestConfig {
         const urlSlug: string = parameters.id ? `${endpoint}/${parameters.id}` : `${endpoint}`;
         return {
             url: `${this.baseUrl}/${urlSlug}`,
             method: requestMethod,
-            data: parameters.payload
+            data: parameters.payload,
+            headers: parameters.headers
         }
     }
 
@@ -39,7 +40,7 @@ export class BaseApi {
      * @param configuration - The request configuration needed from axios.
      * @returns The result from the request as an {@link AxiosResponse}.
      */
-    public async sendRequest(configuration: RequestConfiguration): Promise<AxiosResponse<any, any> | AxiosResponse<unknown, any>> {
+    public async sendRequest(configuration: AxiosRequestConfig): Promise<AxiosResponse<any, any> | AxiosResponse<unknown, any>> {
         return await allure.step(`Sending ${configuration.method} request to: ${configuration.url}`, async (s)=> {
             if(configuration.data) {
                 s.parameter('Request Body', JSON.stringify(configuration.data));
